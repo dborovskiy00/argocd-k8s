@@ -1,0 +1,181 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  creationTimestamp: "2024-03-17T14:37:50Z"
+  generation: 37
+  name: argocd-jenkins
+  namespace: argocd
+  resourceVersion: "4828166"
+  uid: 47e18ef1-557a-4339-9e88-65026eff743e
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: jenkins-helm
+    helm:
+      parameters:
+      - name: appName
+        value: argocd-helm
+      - name: namespace
+        value: argocd-helm
+    repoURL: https://dborovskiy00.github.io/k8s-helm-jenkins/
+    targetRevision: 0.1.0
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
+status:
+  controllerNamespace: argocd
+  health:
+    status: Healthy
+  history:
+  - deployStartedAt: "2024-03-17T14:37:52Z"
+    deployedAt: "2024-03-17T14:37:52Z"
+    id: 0
+    revision: 0.1.0
+    source:
+      chart: jenkins-helm
+      helm:
+        parameters:
+        - name: appName
+          value: argocd-helm
+        - name: namespace
+          value: argocd-helm
+      repoURL: https://dborovskiy00.github.io/k8s-helm-jenkins/
+      targetRevision: 0.1.0
+  - deployStartedAt: "2024-03-17T14:40:41Z"
+    deployedAt: "2024-03-17T14:40:41Z"
+    id: 1
+    revision: 0.1.0
+    source:
+      chart: jenkins-helm
+      helm:
+        parameters:
+        - name: appName
+          value: argocd-helm
+        - name: namespace
+          value: argocd-helm
+      repoURL: https://dborovskiy00.github.io/k8s-helm-jenkins/
+      targetRevision: 0.1.0
+  operationState:
+    finishedAt: "2024-03-17T14:48:09Z"
+    message: successfully synced (all tasks run)
+    operation:
+      initiatedBy:
+        username: admin
+      retry: {}
+      sync:
+        resources:
+        - group: apps
+          kind: Deployment
+          name: argocd-helm
+          namespace: argocd-helm
+        revision: 0.1.0
+        syncOptions:
+        - CreateNamespace=true
+        syncStrategy:
+          hook: {}
+    phase: Succeeded
+    startedAt: "2024-03-17T14:48:09Z"
+    syncResult:
+      resources:
+      - group: apps
+        hookPhase: Running
+        kind: Deployment
+        message: deployment.apps/argocd-helm configured
+        name: argocd-helm
+        namespace: argocd-helm
+        status: Synced
+        syncPhase: Sync
+        version: v1
+      revision: 0.1.0
+      source:
+        chart: jenkins-helm
+        helm:
+          parameters:
+          - name: appName
+            value: argocd-helm
+          - name: namespace
+            value: argocd-helm
+        repoURL: https://dborovskiy00.github.io/k8s-helm-jenkins/
+        targetRevision: 0.1.0
+  reconciledAt: "2024-03-17T14:52:47Z"
+  resources:
+  - kind: ConfigMap
+    name: basic-security
+    namespace: argocd-helm
+    status: Synced
+    version: v1
+  - kind: ConfigMap
+    name: jenkins-config
+    namespace: argocd-helm
+    status: Synced
+    version: v1
+  - kind: Namespace
+    name: argocd-helm
+    status: Synced
+    version: v1
+  - kind: Secret
+    name: jenkins-secret
+    namespace: argocd-helm
+    status: Synced
+    version: v1
+  - health:
+      status: Healthy
+    kind: Service
+    name: argocd-helm
+    namespace: argocd-helm
+    status: Synced
+    version: v1
+  - kind: ServiceAccount
+    name: argocd-jenkins-jenkins-helm
+    namespace: default
+    status: Synced
+    version: v1
+  - group: apps
+    health:
+      status: Healthy
+    kind: Deployment
+    name: argocd-helm
+    namespace: argocd-helm
+    status: OutOfSync
+    version: v1
+  - group: networking.k8s.io
+    health:
+      status: Healthy
+    kind: Ingress
+    name: argocd-helm
+    namespace: argocd-helm
+    status: Synced
+    version: v1
+  - group: rbac.authorization.k8s.io
+    kind: ClusterRoleBinding
+    name: argocd-helm
+    status: Synced
+    version: v1
+  sourceType: Helm
+  summary:
+    externalURLs:
+    - http://jenkins-helm.k8s-3.sa/
+    images:
+    - jfrog.it-academy.by/public/jenkins-ci:spishchyk_02
+  sync:
+    comparedTo:
+      destination:
+        namespace: default
+        server: https://kubernetes.default.svc
+      source:
+        chart: jenkins-helm
+        helm:
+          parameters:
+          - name: appName
+            value: argocd-helm
+          - name: namespace
+            value: argocd-helm
+        repoURL: https://dborovskiy00.github.io/k8s-helm-jenkins/
+        targetRevision: 0.1.0
+    revision: 0.1.0
+    status: OutOfSync
