@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: jenkins-helm
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: jenkins-helm
+    helm:
+      parameters:
+      - name: appName
+        value: jenkins-helm-argocd
+      - name: namespace
+        value: jenkins-helm-argocd
+    repoURL: https://dborovskiy00.github.io/k8s-helm-jenkins/
+    targetRevision: 0.4.0
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+    - CreateNamespace=true
