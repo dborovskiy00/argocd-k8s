@@ -1,0 +1,39 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: project-nextjs
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    chart: nextjs
+    helm:
+      parameters:
+        - name: fullnameOverride
+          value: project-nextjs
+        - name: web.image
+          value: dborovskiy00/nextjs:0.5.0
+        - name: web.replicaCount
+          value: "2"
+        - name: web.ingress.enabled
+          value: "true"
+        - name: web.ingress.hosts[0].host
+          value: project.k8s-3.sa
+        - name: web.ingress.hosts[0].paths[0]
+          value: /
+        - name: web.cachePersistentVolume.enabled
+          value: "true"
+        - name: web.cachePersistentVolume.storageClass
+          value: nfs-project-app
+        - name: .web.cachePersistentVolume.annotations.nfs.io/storage-path
+          value: nextjs-app
+    repoURL: https://icoretech.github.io/helm
+    targetRevision: 1.1.0
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
