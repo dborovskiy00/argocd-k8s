@@ -16,13 +16,13 @@ jobs:
 
       - name: Update version in YAML file
         run: |
-          sed -i "s/^        - name: web\.image$/        - name: web\.image\n          value: dborovskiy00\/nextjs:${{ github.event.client_payload.version }}/" project-nextjs.yaml
+          sed -i "s/^        - name: web\.image$/        - name: web\.image\n          value: dborovskiy00\/nextjs:${{ github.event.client_payload.version }}/" ./apps/project-nextjs.yaml
 
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add project-nextjs.yaml
+          git add .
           git commit -m "${{ github.event.client_payload.version }}"
           git push
 
