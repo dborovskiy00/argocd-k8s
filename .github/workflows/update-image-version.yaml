@@ -14,36 +14,19 @@ jobs:
         with:
           ref: main
 
-      - name: Install yq
+      - name: Update version in YAML file
         run: |
-          wget https://github.com/mikefarah/yq/releases/download/v4.13.2/yq_linux_amd64.tar.gz -O yq.tar.gz
-          tar xzf yq.tar.gz
-          sudo mv yq_linux_amd64 /usr/local/bin/yq
-          sudo chmod +x /usr/local/bin/yq
-          yq --version
-
-      - name: Read project-nextjs.yaml
-        id: read-file
-        run: echo "::set-output name=file-content::$(cat ${{ github.event.client_payload.app_name }}.yaml)"
-
-      - name: Extract current version from YAML file
-        id: extract-version
-        run: echo "::set-output name=version::$(yq r ${{ steps.read-file.outputs.file-content }} app_version)"
-
-      - name: Update image version in file
-        id: update-image
-        run: |
-          sed -i "s/web\.image: .*$/web\.image: dborovskiy00\/nextjs:${{ steps.extract-version.outputs.version }}/" ${{ steps.read-file.outputs.file-content }}
+          sed -i "s/^        - name: web\.image$/        - name: web\.image\n          value: dborovskiy00\/nextjs:${{ github.event.client_payload.version }}/" ${{ github.event.client_payload.app_name }}.yaml
 
       - name: Commit changes
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add ${{ github.event.client_payload.app_name }}.yaml
-          git commit -m ${{ steps.extract-version.outputs.version }}
+          git commit -m "${{ github.event.client_payload.version }}"
           git push
 
       - name: Create and push tag
         run: |
-          git tag -a ${{ steps.extract-version.outputs.version }} -m "Version ${{ steps.extract-version.outputs.version }}"
-          git push origin ${{ steps.extract-version.outputs.version }}
+          git tag -a ${{ github.event.client_payload.version }} -m "Version ${{ github.event.client_payload.version }}"
+          git push origin ${{ github.event.client_payload.version }}
