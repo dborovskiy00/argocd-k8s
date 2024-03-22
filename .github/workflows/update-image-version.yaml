@@ -1,0 +1,20 @@
+name: Update Image version
+
+on:
+  repository_dispatch:
+    types: [trigger-workflow]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+        ref: ${{ github.event.client_payload.sha }}
+
+      - name: Extract service name & version
+        run: | 
+          echo "Service name: ${{ github.event.client_payload.service }}"
+          echo "Version: ${{ github.event.client_payload.version }}"
