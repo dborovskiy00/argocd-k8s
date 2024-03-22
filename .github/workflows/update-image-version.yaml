@@ -11,8 +11,27 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          ref: main
 
-      - name: Extract service name & version
-        run: | 
-          echo "Service name: ${{ github.event.client_payload.service }}"
-          echo "Version: ${{ github.event.client_payload.version }}"
+      - name: Read project-nextjs.yaml
+        id: read-file
+        run: echo "::set-output name=file-content::$(cat ${{ github.event.client_payload.app_name }}.yaml)"
+
+      - name: Update image version in file
+        id: update-image
+        run: |
+          sed -i "s/web\.image: .*$/web\.image: dborovskiy00\/nextjs:${{ github.event.client_payload.version }}/" ${{ steps.read-file.outputs.file-content }}
+
+      - name: Commit changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add ${{ github.event.client_payload.app_name }}.yaml
+          git commit -m "${{ github.event.client_payload.version }}"
+          git push
+
+      - name: Create and push tag
+        run: |
+          git tag -a ${{ github.event.client_payload.version }} -m "Version ${{ github.event.client_payload.version }}"
+          git push origin ${{ github.event.client_payload.version }}
