@@ -21,7 +21,7 @@ jobs:
       - name: Update image version in file
         id: update-image
         run: |
-          sed -i "s/web\.image: .*$/web\.image: dborovskiy00\/nextjs:${{ github.event.client_payload.version }}/" ${{ steps.read-file.outputs.file-content }}
+          sed -i "s/web\.image: .*$/web\.image: dborovskiy00\/nextjs:${{ github.ref_name }}/" ${{ steps.read-file.outputs.file-content }}
 
       - name: Commit changes
         run: |
