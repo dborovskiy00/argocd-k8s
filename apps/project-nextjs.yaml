@@ -14,6 +14,7 @@ spec:
       parameters:
         - name: fullnameOverride
           value: project-nextjs
+        - name: web.image
           value: dborovskiy00/nextjs:2.0.0
         - name: web.replicaCount
           value: "2"
