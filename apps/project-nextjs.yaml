@@ -16,7 +16,6 @@ spec:
           value: project-nextjs
         - name: web.image
           value: dborovskiy00/nextjs:2.0.0
-          value: dborovskiy00/nextjs:0.2.2
         - name: web.replicaCount
           value: "2"
         - name: web.ingress.enabled
